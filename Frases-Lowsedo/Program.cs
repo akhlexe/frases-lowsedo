@@ -1,7 +1,14 @@
+using Frases_Lowsedo.Model;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<FrasesLowsedoDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Development"));
+});
 
 var app = builder.Build();
 
