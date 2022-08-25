@@ -71,6 +71,7 @@ namespace Frases_Lowsedo.Services
                 ?? throw new AuthorNotFoundException($"El autor con Id: {id} no existe en la base de datos.");
 
             repository.Authors.Remove(author);
+            repository.SaveChanges();
         }
     }
 }
