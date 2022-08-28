@@ -1,22 +1,25 @@
-﻿using Frases_Lowsedo.DTOs;
+﻿using Frases_Lowsedo.Contracts.IConfiguration;
+using Frases_Lowsedo.Contracts.IServices;
+using Frases_Lowsedo.DTOs;
 using Frases_Lowsedo.Exceptions;
 using Frases_Lowsedo.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace Frases_Lowsedo.Services
 {
-    public class AuthorService
+    public class IAuthorService : Contracts.IServices.IAuthorService
     {
-        private readonly FrasesLowsedoDBContext repository;
+        private readonly ILogger<IAuthorService> _logger;
+        private readonly IUnitOfWork _repository;
 
-        public AuthorService(FrasesLowsedoDBContext repository)
+        public IAuthorService(IUnitOfWork repository, ILogger<IAuthorService> logger)
         {
-            this.repository = repository;
+            this._repository = repository;
+            _logger = logger;
         }
 
-        public IList<AuthorDTO> GetAll()
+        public async Task<IList<AuthorDTO>> GetAllAsync()
         {
-            List<Author> authors = repository.Authors.AsNoTracking().ToList();
+            IEnumerable<Author> authors = await _repository.Authors.GetAll();
 
             List<AuthorDTO> dto = authors.Select(a => new AuthorDTO
             {
@@ -27,9 +30,9 @@ namespace Frases_Lowsedo.Services
             return dto;
         }
 
-        public AuthorDTO GetById(int id)
+        public async Task<AuthorDTO> GetByIdAsync(int id)
         {
-            Author author = repository.Authors.FirstOrDefault(a => a.Id == id)
+            Author author = await _repository.Authors.GetById(id)
                 ?? throw new AuthorNotFoundException($"El autor con Id: {id} no existe en la base de datos.");
 
             return new AuthorDTO()
@@ -39,7 +42,7 @@ namespace Frases_Lowsedo.Services
             };
         }
 
-        public void SaveAuthor(AuthorDTO authorDTO)
+        public async Task SaveAuthorAsync(AuthorDTO authorDTO)
         {
             if (authorDTO == null)
             {
@@ -50,28 +53,29 @@ namespace Frases_Lowsedo.Services
 
             if (authorDTO.Id > 0)
             {
-                author = repository.Authors.FirstOrDefault(a => a.Id == authorDTO.Id)
+                author = await _repository.Authors.GetById(authorDTO.Id)
                     ?? throw new AuthorNotFoundException($"El autor con Id: {authorDTO.Id} no existe en la base de datos.");
             }
             else
             {
                 author = new Author();
+                author.CreatedAt = DateTime.Now;
             }
 
             author.Name = authorDTO.Name;
 
-            repository.Authors.Add(author);
-            repository.SaveChanges();
+            await _repository.Authors.Add(author);
+            await _repository.CompleteAsync();
         }
 
 
-        public void DeleteAuthor(int id)
+        public async Task DeleteAuthorAsync(int id)
         {
-            Author author = repository.Authors.FirstOrDefault(a => a.Id == id)
+            Author author = await _repository.Authors.GetById(id)
                 ?? throw new AuthorNotFoundException($"El autor con Id: {id} no existe en la base de datos.");
 
-            repository.Authors.Remove(author);
-            repository.SaveChanges();
+            await _repository.Authors.Delete(author);
+            await _repository.CompleteAsync();
         }
     }
 }
