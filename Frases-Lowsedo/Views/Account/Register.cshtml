@@ -1,0 +1,29 @@
+﻿@using Frases_Lowsedo.Controllers
+@using Frases_Lowsedo.Enums
+@model Frases_Lowsedo.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        @using(Html.BeginForm(AccountActions.Register.ToString(), ControllerNames.Account.ToString(),FormMethod.Post))
+        {
+            <div asp-validation-summary="All" class="text-danger"></div>
+             <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password">
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+        }
+    </div>
+</div>

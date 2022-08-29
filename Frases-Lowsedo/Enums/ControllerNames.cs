@@ -2,6 +2,8 @@
 {
     public enum ControllerNames
     {
-        Frases
+        Quote,
+        Author,
+        Account
     }
 }

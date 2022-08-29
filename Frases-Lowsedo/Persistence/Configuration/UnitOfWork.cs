@@ -12,17 +12,14 @@ namespace Frases_Lowsedo.Persistence.Configuration
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly FrasesLowsedoDBContext _context;
-        private readonly ILogger _logger;
         public IAuthorRepository Authors { get; private set; }
 
         public UnitOfWork(
-            FrasesLowsedoDBContext context,
-            ILoggerFactory loggerFactory
+            FrasesLowsedoDBContext context
         )
         {
             _context = context;
-            _logger = loggerFactory.CreateLogger("logs");
-            Authors = new AuthorRepository(_context, _logger);
+            Authors = new AuthorRepository(_context);
         }
 
         public async Task CompleteAsync()

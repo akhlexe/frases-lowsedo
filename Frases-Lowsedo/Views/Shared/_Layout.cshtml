@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Frases_Lowsedo.Controllers
+@using Frases_Lowsedo.Enums
+@inject SignInManager<IdentityUser> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,6 +29,28 @@
                         <li class="nav-item">
                             @Html.ActionLink("Autores", "Index", "Author", new {}, new { @class = "nav-link text-dark"})
                         </li>
+                        
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <form method="post" asp-action=@AccountActions.LogoutAsync.ToString(), asp-controller=@ControllerNames.Account.ToString()>
+                                    <button type="submit" class="nav-link btn btn-link py-0">
+                                        Logout @User.Identity?.Name
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                        <li class="nav-item">
+                            @Html.ActionLink("Registrar", AccountActions.Register.ToString(), ControllerNames.Account.ToString(), new {}, new { @class = "nav-link text-dark"})
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Login", AccountActions.Login.ToString(), ControllerNames.Account.ToString(), new {}, new { @class = "nav-link text-dark"})
+                        </li>
+                        }
                     </ul>
                 </div>
             </div>
