@@ -7,9 +7,8 @@ namespace Frases_Lowsedo.Persistence.Repositories
     public class AuthorRepository : GenericRepository<Author>, IAuthorRepository
     {
         public AuthorRepository(
-            FrasesLowsedoDBContext context,
-            ILogger logger
-        ) : base(context, logger)
+            FrasesLowsedoDBContext context
+        ) : base(context)
         {
         }
 
@@ -22,7 +21,6 @@ namespace Frases_Lowsedo.Persistence.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{Repo} Add method error", typeof(AuthorRepository));
             }
             return false;
         }
@@ -37,7 +35,6 @@ namespace Frases_Lowsedo.Persistence.Repositories
             catch (Exception ex)
             {
 
-                _logger.LogError(ex, "{Repo} All method error", typeof(AuthorRepository));
                 return new List<Author>();
             }
         }

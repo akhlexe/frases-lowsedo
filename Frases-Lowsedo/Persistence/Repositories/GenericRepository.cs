@@ -12,12 +12,10 @@ namespace Frases_Lowsedo.Persistence.Repositories
     {
         protected FrasesLowsedoDBContext _context;
         protected DbSet<T> dbSet;
-        protected readonly ILogger _logger;
 
-        public GenericRepository(FrasesLowsedoDBContext context, ILogger logger)
+        public GenericRepository(FrasesLowsedoDBContext context)
         {
             _context = context;
-            _logger = logger;
             this.dbSet = context.Set<T>();
         }
 

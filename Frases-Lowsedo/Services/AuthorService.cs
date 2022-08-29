@@ -8,13 +8,11 @@ namespace Frases_Lowsedo.Services
 {
     public class IAuthorService : Contracts.IServices.IAuthorService
     {
-        private readonly ILogger<IAuthorService> _logger;
         private readonly IUnitOfWork _repository;
 
-        public IAuthorService(IUnitOfWork repository, ILogger<IAuthorService> logger)
+        public IAuthorService(IUnitOfWork repository)
         {
             this._repository = repository;
-            _logger = logger;
         }
 
         public async Task<IList<AuthorDTO>> GetAllAsync()

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Frases_Lowsedo.Model
 {
-    public class FrasesLowsedoDBContext : DbContext
+    public class FrasesLowsedoDBContext : IdentityDbContext
     {
 
         public FrasesLowsedoDBContext(DbContextOptions<FrasesLowsedoDBContext> options) : base(options)
