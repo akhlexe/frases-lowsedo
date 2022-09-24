@@ -13,6 +13,7 @@ namespace Frases_Lowsedo.Persistence.Configuration
     {
         private readonly FrasesLowsedoDBContext _context;
         public IAuthorRepository Authors { get; private set; }
+        public IQuoteRepository Quotes { get; private set; }
 
         public UnitOfWork(
             FrasesLowsedoDBContext context
@@ -20,6 +21,7 @@ namespace Frases_Lowsedo.Persistence.Configuration
         {
             _context = context;
             Authors = new AuthorRepository(_context);
+            Quotes = new IQuoteRepository(_context);
         }
 
         public async Task CompleteAsync()

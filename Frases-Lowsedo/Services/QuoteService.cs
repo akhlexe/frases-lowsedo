@@ -1,4 +1,5 @@
-﻿using Frases_Lowsedo.DTOs;
+﻿using Frases_Lowsedo.Contracts.IConfiguration;
+using Frases_Lowsedo.DTOs;
 using Frases_Lowsedo.Exceptions;
 using Frases_Lowsedo.Model;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,9 @@ namespace Frases_Lowsedo.Services
 {
     public class QuoteService
     {
-        private readonly FrasesLowsedoDBContext repository;
+        private readonly IUnitOfWork repository;
 
-        public QuoteService(FrasesLowsedoDBContext repository)
+        public QuoteService(IUnitOfWork repository)
         {
             this.repository = repository;
         }

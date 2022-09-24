@@ -17,6 +17,7 @@ namespace Frases_Lowsedo.Controllers
             this.signInManager = signInManager;
         }
 
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -50,10 +51,29 @@ namespace Frases_Lowsedo.Controllers
             return View(model);
         }
 
-        //public IActionResult Login(LoginViewModel model)
-        //{
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View("Login");
+        }
 
-        //}
+        [HttpPost]
+        public async Task<IActionResult> LoginAsync(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid Login Attemp");
+            }
+
+            return View("Login");
+        }
 
         [HttpPost]
         public async Task<IActionResult> LogoutAsync()
@@ -69,6 +89,7 @@ namespace Frases_Lowsedo.Controllers
         Register,
         RegisterAsync,
         Login,
-        LogoutAsync
+        LoginAsync,
+        Logout
     }
 }

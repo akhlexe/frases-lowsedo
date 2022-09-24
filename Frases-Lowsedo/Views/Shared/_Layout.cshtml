@@ -35,7 +35,7 @@
                         @if (signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <form method="post" asp-action=@AccountActions.LogoutAsync.ToString(), asp-controller=@ControllerNames.Account.ToString()>
+                                <form method="post" asp-action=@AccountActions.Logout.ToString() asp-controller=@ControllerNames.Account.ToString()>
                                     <button type="submit" class="nav-link btn btn-link py-0">
                                         Logout @User.Identity?.Name
                                     </button>

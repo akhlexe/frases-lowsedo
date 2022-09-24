@@ -5,9 +5,9 @@ namespace Frases_Lowsedo.Controllers
 {
     public class AuthorController : Controller
     {
-        private readonly IAuthorService authorService;
+        private readonly AuthorService authorService;
 
-        public AuthorController(IAuthorService authorService)
+        public AuthorController(AuthorService authorService)
         {
             this.authorService = authorService;
         }

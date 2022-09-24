@@ -8,8 +8,8 @@ namespace Frases_Lowsedo.Contracts.IServices
 
         Task<AuthorDTO> GetByIdAsync(int id);
 
-        Task SaveAuthorAsync(AuthorDTO authorDTO);
+        Task SaveAsync(AuthorDTO authorDTO);
 
-        Task DeleteAuthorAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

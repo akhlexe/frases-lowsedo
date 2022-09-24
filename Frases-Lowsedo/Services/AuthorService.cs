@@ -6,18 +6,18 @@ using Frases_Lowsedo.Model;
 
 namespace Frases_Lowsedo.Services
 {
-    public class IAuthorService : Contracts.IServices.IAuthorService
+    public class AuthorService : IAuthorService
     {
-        private readonly IUnitOfWork _repository;
+        private readonly IUnitOfWork repository;
 
-        public IAuthorService(IUnitOfWork repository)
+        public AuthorService(IUnitOfWork repository)
         {
-            this._repository = repository;
+            this.repository = repository;
         }
 
         public async Task<IList<AuthorDTO>> GetAllAsync()
         {
-            IEnumerable<Author> authors = await _repository.Authors.GetAll();
+            IEnumerable<Author> authors = await repository.Authors.GetAll();
 
             List<AuthorDTO> dto = authors.Select(a => new AuthorDTO
             {
@@ -30,7 +30,7 @@ namespace Frases_Lowsedo.Services
 
         public async Task<AuthorDTO> GetByIdAsync(int id)
         {
-            Author author = await _repository.Authors.GetById(id)
+            Author author = await repository.Authors.GetById(id)
                 ?? throw new AuthorNotFoundException($"El autor con Id: {id} no existe en la base de datos.");
 
             return new AuthorDTO()
@@ -40,7 +40,7 @@ namespace Frases_Lowsedo.Services
             };
         }
 
-        public async Task SaveAuthorAsync(AuthorDTO authorDTO)
+        public async Task SaveAsync(AuthorDTO authorDTO)
         {
             if (authorDTO == null)
             {
@@ -51,7 +51,7 @@ namespace Frases_Lowsedo.Services
 
             if (authorDTO.Id > 0)
             {
-                author = await _repository.Authors.GetById(authorDTO.Id)
+                author = await repository.Authors.GetById(authorDTO.Id)
                     ?? throw new AuthorNotFoundException($"El autor con Id: {authorDTO.Id} no existe en la base de datos.");
             }
             else
@@ -62,18 +62,18 @@ namespace Frases_Lowsedo.Services
 
             author.Name = authorDTO.Name;
 
-            await _repository.Authors.Add(author);
-            await _repository.CompleteAsync();
+            await repository.Authors.Add(author);
+            await repository.CompleteAsync();
         }
 
 
-        public async Task DeleteAuthorAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            Author author = await _repository.Authors.GetById(id)
+            Author author = await repository.Authors.GetById(id)
                 ?? throw new AuthorNotFoundException($"El autor con Id: {id} no existe en la base de datos.");
 
-            await _repository.Authors.Delete(author);
-            await _repository.CompleteAsync();
+            await repository.Authors.Delete(author);
+            await repository.CompleteAsync();
         }
     }
 }
