@@ -21,7 +21,7 @@ namespace Frases_Lowsedo.Persistence.Configuration
         {
             _context = context;
             Authors = new AuthorRepository(_context);
-            Quotes = new IQuoteRepository(_context);
+            Quotes = new QuoteRepository(_context);
         }
 
         public async Task CompleteAsync()
