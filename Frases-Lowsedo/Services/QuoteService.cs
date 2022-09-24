@@ -1,4 +1,5 @@
 ﻿using Frases_Lowsedo.Contracts.IConfiguration;
+using Frases_Lowsedo.Contracts.IServices;
 using Frases_Lowsedo.DTOs;
 using Frases_Lowsedo.Exceptions;
 using Frases_Lowsedo.Model;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Frases_Lowsedo.Services
 {
-    public class QuoteService
+    public class QuoteService : IQuoteService
     {
         private readonly IUnitOfWork repository;
 
@@ -15,9 +16,9 @@ namespace Frases_Lowsedo.Services
             this.repository = repository;
         }
 
-        public IList<QuoteDTO> GetAll()
+        public async Task<IList<QuoteDTO>> GetAllAsync()
         {
-            List<Quote> quotes = repository.Quotes.AsNoTracking().ToList();
+            IEnumerable<Quote> quotes = await repository.Quotes.GetAll();
 
             return quotes.Select(quote => new QuoteDTO()
             {
@@ -30,7 +31,7 @@ namespace Frases_Lowsedo.Services
             }).ToList();
         }
 
-        public void SaveQuote(QuoteDTO quoteDTO)
+        public async Task SaveAsync(QuoteDTO quoteDTO)
         {
             if (quoteDTO == null)
             {
@@ -41,7 +42,7 @@ namespace Frases_Lowsedo.Services
 
             if (quoteDTO.Id > 0)
             {
-                quote = repository.Quotes.FirstOrDefault(q => q.Id == quoteDTO.Id)
+                quote = await repository.Quotes.GetById(quoteDTO.Id)
                     ?? throw new QuoteNotFoundException($"No existe frase con Id: {quoteDTO.Id}");
             }
             else
@@ -54,23 +55,23 @@ namespace Frases_Lowsedo.Services
             quote.Author.Name = quoteDTO.AuthorName;
             quote.CreatedAt = DateTime.Now;
 
-            repository.Quotes.Add(quote);
-            repository.SaveChanges();
+            await repository.Quotes.Add(quote);
+            await repository.CompleteAsync();
 
         }
 
-        public void DeleteQuote(int id)
+        public async Task DeleteAsync(int id)
         {
-            Quote quote = repository.Quotes.FirstOrDefault(q => q.Id == id)
+            Quote quote = await repository.Quotes.GetById(id)
                 ?? throw new QuoteNotFoundException($"No existe frase con Id: {id}");
 
-            repository.Quotes.Remove(quote);
-            repository.SaveChanges();
+            await repository.Quotes.Delete(quote);
+            await repository.CompleteAsync();
         }
 
-        public QuoteDTO GetById(int id)
+        public async Task<QuoteDTO> GetByIdAsync(int id)
         {
-            Quote quote = repository.Quotes.FirstOrDefault(q => q.Id == id)
+            Quote quote = await repository.Quotes.GetById(id)
                 ?? throw new QuoteNotFoundException($"No existe frase con Id: {id}");
 
             return new QuoteDTO()
@@ -82,6 +83,5 @@ namespace Frases_Lowsedo.Services
                 CreatedAt = quote.CreatedAt,
             };
         }
-
     }
 }

@@ -5,7 +5,8 @@ namespace Frases_Lowsedo.Persistence.Repositories
 {
     public class QuoteRepository : GenericRepository<Quote>, IQuoteRepository
     {
-        public QuoteRepository(FrasesLowsedoDBContext context) : base(context)
+        public QuoteRepository(FrasesLowsedoDBContext context)
+            : base(context)
         {
         }
 
